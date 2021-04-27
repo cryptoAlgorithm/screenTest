@@ -140,7 +140,7 @@ void clockTick() {
   
   // Then write some new text
   clockText.print(h); clockText.print(F(":")); clockText.print(m);
-  clockText.print(F(":")); clockText.println(s);
+  clockText.print((now.second() % 2 == 0) ? F(":") : F(".")); clockText.println(s);
   clockText.print(daysOfTheWeek[now.dayOfTheWeek()]); clockText.print(F(" "));
   clockText.println(now.day());
   clockText.print(months[now.month() - 1]); clockText.print(F(" ")); 

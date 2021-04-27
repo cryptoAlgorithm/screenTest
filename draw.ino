@@ -51,8 +51,7 @@ void drawDraw() {
 void drawHitbox(TSPoint p) {
   const uint8_t btnW = scn.height() / 10;
   if (p.x < BTN_HEIGHT && p.y < BTN_HEIGHT) drawLauncher();
-  else if (p.x < BTN_HEIGHT && p.y > scn.height() - BTN_HEIGHT &&
-           p.y < scn.height() - UI_MG && p.x > UI_MG) drawDraw(); // Restart activity
+  else if (p.x < BTN_HEIGHT && p.y > scn.height() - BTN_HEIGHT) drawDraw(); // Restart activity
   else if (p.x > scn.width() - btnW - 4) setDrawCol(p.y);
   else scn.fillCircle(p.x, p.y, 1, selColor);
 }

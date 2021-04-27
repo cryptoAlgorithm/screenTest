@@ -41,7 +41,7 @@ RTC_DS1307 rtc;
 #define BASE_FS    12
 #define N_RADIUS   7
 #define L_RADIUS   12
-#define VERSION    "0-2-1"
+#define VERSION    "0.2.2"
 
 // State vars
 uint8_t state = 0;
@@ -87,39 +87,48 @@ int i = 0;
 // the loop function runs over and over again until power down or reset
 void loop()
 {
-    //  Get raw touchscreen values.
-    TSPoint p = scn.getPoint();
+  // Tick function for certain activities
+  if (millis() % 1000 == 0) {
+    digitalWrite(LED_BUILTIN, hb_state);
+    hb_state = !hb_state;
+    tick();
+  }
 
-    //  Remaps raw touchscreen values to screen co-ordinates.  Automatically handles
-    //  rotation!
-    scn.normalizeTsPoint(p);
+  
+  //  Get raw touchscreen values.
+  TSPoint p = scn.getPoint();
 
-    // Check if in hitbox
-    switch (state) {
-      case 0:
-        launcherHitbox(p);
-        break;
-      case 1:
-        if (p.x > scn.width() - BTN_HEIGHT && p.y < BTN_HEIGHT) drawMenu();
-        else if (p.x < BTN_HEIGHT && p.y < BTN_HEIGHT) drawLauncher();
-        break;
-      case 2:
-        if (p.x > scn.width() - BTN_HEIGHT && p.y < BTN_HEIGHT) drawClock();
-        break;
-      case 3:
-        drawHitbox(p);
-        break;
-      case 4:
-        if (p.x < BTN_HEIGHT && p.y < BTN_HEIGHT + UI_MG / 2 && p.y > UI_MG / 2) drawLauncher();
-        break;
-      case 5:
-        if (p.x < BTN_HEIGHT && p.y < BTN_HEIGHT + UI_MG / 2 && p.y > UI_MG / 2) drawLauncher();
-        break;
-    }
+  //  Remaps raw touchscreen values to screen co-ordinates.  Automatically handles
+  //  rotation!
+  scn.normalizeTsPoint(p);
 
-    if (millis() % 1000 == 0) {
-      tick();
-      digitalWrite(LED_BUILTIN, hb_state);
-      hb_state = !hb_state;
-    }
+  // Deadzone
+  if (p.y > scn.height() - UI_MG && p.x < UI_MG) return;
+
+  // Check if in hitbox
+  switch (state) {
+    case 0:
+      launcherHitbox(p);
+      break;
+    case 1:
+      if (p.x > scn.width() - BTN_HEIGHT && p.y < BTN_HEIGHT) drawMenu();
+      else if (p.x < BTN_HEIGHT && p.y < BTN_HEIGHT) drawLauncher();
+      break;
+    case 2:
+      if (p.x > scn.width() - BTN_HEIGHT && p.y < BTN_HEIGHT) drawClock();
+      break;
+    case 3:
+      drawHitbox(p);
+      break;
+    case 4:
+      if (p.x < BTN_HEIGHT && p.y < BTN_HEIGHT + UI_MG / 2 && p.y > UI_MG / 2) drawLauncher();
+      break;
+    case 5:
+      if (p.x < BTN_HEIGHT && p.y < BTN_HEIGHT + UI_MG / 2 && p.y > UI_MG / 2) drawLauncher();
+      break;
+    case 6:
+      if (p.x < BTN_HEIGHT && p.y < BTN_HEIGHT + UI_MG / 2 && p.y > UI_MG / 2) drawLauncher();
+      else handleGameHitbox(p);
+      break;
+  }
 }

@@ -2,6 +2,7 @@ void drawSettings() {
   state = 5;
   
   scn.fillScreen(BLACK);
+  
   scn.setFont(&Raleway24pt);
   scn.setCursor(UI_MG + BTN_HEIGHT, BASE_FS * 2 + UI_MG * 3 / 2);
   scn.println(F("Settings"));

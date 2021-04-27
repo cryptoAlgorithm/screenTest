@@ -40,4 +40,6 @@ void launcherHitbox(TSPoint p) {
   drawCalc();
   else if (p.x > lgc(2, w) && p.y > UI_MG * 5 + w && p.x < lgc(2, w) + w && p.y < UI_MG * 5 + w*2)
   drawSettings(); 
+  else if (p.x > lgc(0, w) && p.y > UI_MG * 5 + w && p.x < lgc(0, w) + w && p.y < UI_MG * 5 + w*2)
+  drawGames(); 
 }
